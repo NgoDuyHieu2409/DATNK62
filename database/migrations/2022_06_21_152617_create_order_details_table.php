@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateManageTablesTable extends Migration
+class CreateOrderDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateManageTablesTable extends Migration
      */
     public function up()
     {
-        Schema::create('manage_tables', function (Blueprint $table) {
+        Schema::create('order_details', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->tinyInteger('status');
-            $table->softDeletes();
+            $table->string('order_id');
+            $table->string('quantyti');
+            $table->string('product_id');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateManageTablesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('manage_tables');
+        Schema::dropIfExists('order_details');
     }
 }

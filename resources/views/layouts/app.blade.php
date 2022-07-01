@@ -17,26 +17,28 @@
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="author" content="Awaiken Theme">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>HieuND</title>
 
     {{-- <link
         href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800,900%7CPlayfair+Display:400,700,900"
         rel="stylesheet"> --}}
-        <link href="css/font-awesome.min.css" rel="stylesheet" media="screen">
-        <link href="css/pe-icon-7-stroke.css" rel="stylesheet" media="screen">
-        <link href="css/flaticon.css" rel="stylesheet" media="screen">
-        <link rel="stylesheet" href="css/owl.carousel.css">
-        <link href="css/magnific-popup.css" rel="stylesheet">
-        <link rel="stylesheet" href="css/slicknav.css">
-        <link rel="stylesheet" data-template-style="true" type="text/css" href="css/CSTiles-1.1.0.css">
-        <link href="css/custom.css" rel="stylesheet" media="screen">
-        
-        <!-- Styles -->
-        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/css/font-awesome.min.css" rel="stylesheet" media="screen">
+    <link href="/css/pe-icon-7-stroke.css" rel="stylesheet" media="screen">
+    <link href="/css/flaticon.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="/css/owl.carousel.css">
+    <link href="/css/magnific-popup.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/slicknav.css">
+    <link rel="stylesheet" data-template-style="true" type="text/css" href="/css/CSTiles-1.1.0.css">
+    <link href="/css/custom.css" rel="stylesheet" media="screen">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{ asset('/css/app.css') }}">
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('/js/app.js') }}" defer></script>
 </head>
 
 <body class="font-sans antialiased">
@@ -56,15 +58,15 @@
         </main>
     </div>
 
-    <script src="js/jquery-1.12.4.min.js"></script>
-	<script src="js/SmoothScroll.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.counterup.min.js"></script>
-	<script src="js/jquery.slicknav.js"></script>
-	<script src="js/jquery.magnific-popup.js"></script>
-	<script src="js/owl.carousel.js"></script>
-	<script src="js/jquery.CSTiles-1.1.0.min.js"></script>
-    <script src="js/function.js"></script>
+    <script src="/js/jquery-1.12.4.min.js"></script>
+	<script src="/js/SmoothScroll.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.counterup.min.js"></script>
+	<script src="/js/jquery.slicknav.js"></script>
+	<script src="/js/jquery.magnific-popup.js"></script>
+	<script src="/js/owl.carousel.js"></script>
+	<script src="/js/jquery.CSTiles-1.1.0.min.js"></script>
+    <script src="/js/function.js"></script>
 </body>
 
 </html>

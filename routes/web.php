@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\TableWaitingController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BookTableController;
+use App\Http\Controllers\AdminBookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,12 +40,21 @@ Route::get('/dashboard#dichvu', function(){
     return view('dashboard');
 })->middleware(['auth'])->name('b');
 
-Route::get('/datban', function(){
-    return view('dashboard');
-})->middleware(['auth'])->name('datban');
+
+// Route::get('/datban', [TableWaitingController::class, 'index'])->middleware(['auth'])->name('datban');
+Route::get('/datban', [TableWaitingController::class, 'index'])->name('datban');
+
+Route::get('/danhsach/{id?}',[BookTableController::class, 'index'])->name('danhsach');
+Route::post('/danhsach/{id?}',[BookTableController::class, 'store'])->name('saveproduct');
+
+Route::post('/getProduct', [BookTableController::class, 'getProduct']);
+Route::get('/getProduct', [BookTableController::class, 'getProduct']);
 
 require __DIR__.'/auth.php';
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
+
+    Route::get('admin-books', [AdminBookController::class, 'index'])->name('admin.book');
+
 });

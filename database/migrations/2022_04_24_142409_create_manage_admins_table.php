@@ -20,6 +20,7 @@ class CreateManageAdminsTable extends Migration
             $table->string('email');
             $table->string('password');
             $table->tinyInteger('role');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

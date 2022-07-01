@@ -34,7 +34,7 @@
 					<div class="history-single">
 						<div class="main-title">
 							<p>Nhà hàng ẩm thực</p>
-							<h2>Hòa Moi</h2>
+							<h2>Hiệu ND</h2>
 						</div>
 						
 						<div class="history-desc">
@@ -99,7 +99,7 @@
 				<div class="col-md-12">
 					<div class="main-title">
 						<p>Hình ảnh</p>
-						<h2>Hòa Moi</h2>
+						<h2>Hiệu ND</h2>
 					</div>
 				</div>
 			</div>
@@ -238,9 +238,14 @@
 
 	<section class="contactus" id="contact">
 		<div class="google-map">
-			<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.0747595029857!2d105.78405761526743!3d21.029694485997855!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab4c69bde3f9%3A0x7d8264f1eb538f6c!2zNzcgUGjhu5EgROG7i2NoIFbhu41uZyBI4bqtdSwgROG7i2NoIFbhu41uZyBI4bqtdSwgQ-G6p3UgR2nhuqV5LCBIw6AgTuG7mWksIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1623526355827!5m2!1svi!2s" width="600" style="border:0;" ></iframe>
+			{{-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.0747595029857!2d105.78405761526743!3d21.029694485997855!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab4c69bde3f9%3A0x7d8264f1eb538f6c!2zNzcgUGjhu5EgROG7i2NoIFbhu41uZyBI4bqtdSwgROG7i2NoIFbhu41uZyBI4bqtdSwgQ-G6p3UgR2nhuqV5LCBIw6AgTuG7mWksIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1623526355827!5m2!1svi!2s" width="600" style="border:0;" ></iframe> --}}
+			<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3723.5340911100775!2d105.79720401424579!3d21.05132029238529!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab249dd1ab85%3A0xf42f72a3f9a9ec2c!2s6th%20Element!5e0!3m2!1svi!2s!4v1653987706974!5m2!1svi!2s" height="750" style="border:0;" allowfullscreen="true" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 		</div>
 		
+		
+	</section>
+	
+	<footer>
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12">
@@ -255,26 +260,26 @@
 										<p style="color: black;">Hãy gọi cho chúng tôi để đặt bàn</p>
 										<p style="margin-top: 10px;">Thông tin liên hệ</p>
 									</div>
-									<div class="contact-image">
+									{{-- <div class="contact-image">
 										<img src="images/contact.png" alt="" />
-									</div>
+									</div> --}}
 									<div class="contact-information">
 										<div class="contact-info-single">
 											<div class="icon-box"><i class="pe-7s-map-marker"></i></div>
-											<p>77 Dịch Vọng Hậu<br />
-											Cầu Giấy, Hà Nội</p>
+											<p>6th Element<br />
+											Xuân La, Tây Hồ, Hà Nội</p>
 										</div>
 										
 										<div class="contact-info-single">
 											<div class="icon-box"><i class="pe-7s-call"></i></div>
-											<p>0964980898<br />
-												0969512151</p>
+											<p>0988356147<br />
+												0961967684</p>
 										</div>
 										
 										<div class="contact-info-single">
 											<div class="icon-box"><i class="pe-7s-mail"></i></div>
-											<p>hoa@gmail.com<br />
-											nhahanghoamoi@gmail.com</p>
+											<p>duyhieu@gmail.com<br />
+											nhahanghieund@gmail.com</p>
 										</div>
 									</div>
 								</div>
@@ -286,14 +291,11 @@
 				</div>
 			</div>
 		</div>
-	</section>
-
-	<footer>
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12">
 					<div class="siteinfo">
-						<p>Copyright &copy; Hòa Moi. All rights reserved</p>
+						<p>Copyright &copy; Hieu ND. All rights reserved</p>
 					</div>
 					
 					

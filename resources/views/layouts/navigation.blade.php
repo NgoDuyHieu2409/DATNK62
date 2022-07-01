@@ -1,3 +1,4 @@
+
 <nav id="main-nav" class="navbar navbar-default navbar-fixed-top">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -5,14 +6,14 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="#home">
+                    <a href="/">
                         <x-application-logo class="block h-10 w-auto fill-current text-gray-600" />
                     </a>
                 </div>
               
                 <!-- Navigation Links -->
                 @php
-                    $a = "#aboutus";
+                    $a = "#about";
                     $b = "#service";
                     $c = "#gallery";
                     $d = "#testimonial";
@@ -20,12 +21,44 @@
                 @endphp
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     @if (request()->routeIs('datban'))
-                        <x-nav-link :href="$a">
+                        {{-- <x-nav-link :href="$a">
                             {{ __('Giới thiệu') }}
                         </x-nav-link>
                         <x-nav-link :href="$b">
                             {{ __('Dịch vụ') }}
                         </x-nav-link>
+                        <x-nav-link :href="$b">
+                            {{ __('Dịch vụ') }}
+                        </x-nav-link>
+                        <x-nav-link :href="$b">
+                            {{ __('Dịch vụ') }}
+                        </x-nav-link> --}}
+                    @elseif (request()->routeIs('danhsach'))
+                    <x-nav-link :href="$a">
+                        {{ __('Chọn bàn') }}
+                    </x-nav-link>
+                    <x-nav-link :href="$a">
+                        {{ __('Món gà') }}
+                    </x-nav-link>
+                    <x-nav-link :href="$a">
+                        {{ __('Món vịt') }}
+                    </x-nav-link>
+                    <x-nav-link :href="$a">
+                        {{ __('Món bò') }}
+                    </x-nav-link>
+                    <x-nav-link :href="$a">
+                        {{ __('Món dê') }}
+                    </x-nav-link>
+                    <x-nav-link :href="$a">
+                        {{ __('Món hải sản') }}
+                    </x-nav-link>
+                    <x-nav-link :href="$a">
+                        {{ __('Món khai vị') }}
+                    </x-nav-link>
+                    <x-nav-link :href="$a">
+                        {{ __('Đồ uống') }}
+                    </x-nav-link>
+                   
                     @else
                         <x-nav-link :href="$a">
                             {{ __('Giới thiệu') }}
@@ -42,6 +75,9 @@
                         <x-nav-link :href="$e">
                             {{ __('Liên hệ') }}
                         </x-nav-link>
+                        {{-- <x-nav-link :href="route('datban')">
+                            {{ __('Đặt bàn') }}
+                        </x-nav-link> --}}
                         @if (Auth::user())
                             <x-nav-link :href="route('datban')">
                                 {{ __('Đặt bàn') }}

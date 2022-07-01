@@ -21,6 +21,7 @@ class CreateManageProductsTable extends Migration
             $table->float('sale');
             $table->string('image');
             $table->tinyInteger('status');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

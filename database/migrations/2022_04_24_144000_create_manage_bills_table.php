@@ -22,6 +22,7 @@ class CreateManageBillsTable extends Migration
             $table->string('status');
             $table->string('time_start');
             $table->string('time_end');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

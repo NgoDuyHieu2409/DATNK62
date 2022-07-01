@@ -4,10 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ManageAdmin extends Model
+class OrderDetail extends Model
 {
     use HasFactory;
-    use SoftDeletes;
+
+    protected $fillable =[
+        'order_id',
+        'quantyti',
+        'product_id',
+    ];   
 }
