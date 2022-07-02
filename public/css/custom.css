@@ -1094,3 +1094,8 @@ footer {
 		top: 8px;
 	}
 }
+
+.hidden.space-x-8.sm\:-my-px.sm\:ml-10.sm\:flex a {
+    font-size: 14px;
+    white-space: nowrap;
+}

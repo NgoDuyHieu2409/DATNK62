@@ -1,8 +1,8 @@
 
 <nav id="main-nav" class="navbar navbar-default navbar-fixed-top">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style="display: contents;">
+        <div class="flex justify-between h-16" style="height: 64px; padding: 0 30px;">
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
@@ -21,7 +21,7 @@
                 @endphp
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     @if (request()->routeIs('datban'))
-                        {{-- <x-nav-link :href="$a">
+                        <x-nav-link :href="$a">
                             {{ __('Giới thiệu') }}
                         </x-nav-link>
                         <x-nav-link :href="$b">
@@ -32,32 +32,32 @@
                         </x-nav-link>
                         <x-nav-link :href="$b">
                             {{ __('Dịch vụ') }}
-                        </x-nav-link> --}}
+                        </x-nav-link>
                     @elseif (request()->routeIs('danhsach'))
-                    <x-nav-link :href="$a">
-                        {{ __('Chọn bàn') }}
-                    </x-nav-link>
-                    <x-nav-link :href="$a">
-                        {{ __('Món gà') }}
-                    </x-nav-link>
-                    <x-nav-link :href="$a">
-                        {{ __('Món vịt') }}
-                    </x-nav-link>
-                    <x-nav-link :href="$a">
-                        {{ __('Món bò') }}
-                    </x-nav-link>
-                    <x-nav-link :href="$a">
-                        {{ __('Món dê') }}
-                    </x-nav-link>
-                    <x-nav-link :href="$a">
-                        {{ __('Món hải sản') }}
-                    </x-nav-link>
-                    <x-nav-link :href="$a">
-                        {{ __('Món khai vị') }}
-                    </x-nav-link>
-                    <x-nav-link :href="$a">
-                        {{ __('Đồ uống') }}
-                    </x-nav-link>
+                        <x-nav-link :href="$a">
+                            {{ __('Chọn bàn') }}
+                        </x-nav-link>
+                        <x-nav-link :href="$a">
+                            {{ __('Món gà') }}
+                        </x-nav-link>
+                        <x-nav-link :href="$a">
+                            {{ __('Món vịt') }}
+                        </x-nav-link>
+                        <x-nav-link :href="$a">
+                            {{ __('Món bò') }}
+                        </x-nav-link>
+                        <x-nav-link :href="$a">
+                            {{ __('Món dê') }}
+                        </x-nav-link>
+                        <x-nav-link :href="$a">
+                            {{ __('Món hải sản') }}
+                        </x-nav-link>
+                        <x-nav-link :href="$a">
+                            {{ __('Món khai vị') }}
+                        </x-nav-link>
+                        <x-nav-link :href="$a">
+                            {{ __('Đồ uống') }}
+                        </x-nav-link>
                    
                     @else
                         <x-nav-link :href="$a">
@@ -96,7 +96,7 @@
                 <div class="hidden sm:flex sm:items-center sm:ml-6">
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
-                            <button class="flex items-center text-sm font-medium text-white hover:text-warning focus:outline-none focus:text-warning transition duration-150 ease-in-out">
+                            <button style="font-size: 14px;" class="flex items-center text-sm font-medium text-white hover:text-warning focus:outline-none focus:text-warning transition duration-150 ease-in-out">
                                 <div>{{ Auth::user()->name }}</div>
 
                                 <div class="ml-1">
@@ -168,4 +168,3 @@
         @endif
     </div>
 </nav>
-

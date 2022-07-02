@@ -1366,11 +1366,11 @@ select {
   }
 
   .sm\:block {
-    display: block;
+    display: block !important;
   }
 
   .sm\:flex {
-    display: flex;
+    display: flex !important;
   }
 
   .sm\:hidden {
