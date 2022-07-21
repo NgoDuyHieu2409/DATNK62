@@ -4,6 +4,8 @@ use App\Http\Controllers\TableWaitingController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookTableController;
 use App\Http\Controllers\AdminBookController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ManageBillController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,7 +56,18 @@ require __DIR__.'/auth.php';
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
-
+    
     Route::get('admin-books', [AdminBookController::class, 'index'])->name('admin.book');
+    Route::get('list',[ManageBillController::class, 'getProduct']);
+    Route::post('update/{id?}',[ManageBillController::class, 'update'])->name('update');
+    Route::get('/manage-bills',[ManageBillController::class, 'index'])->name('voyager.manage-bills.index');
+    Route::post('/manage-bills/update/{id?}',[ManageBillController::class, 'UOrderDetail'])->name('admin.manage-bills.updateOrderDetail');
+    
+
+
+    Route::get('/active/{id?}/{tableId?}', [ManageBillController::class, 'active'])->name('cate.active');
+    // Route::get('/unacive/{cate_id}', [CategoryController::class, 'unactive'])->name('cate.unactive');
+    
+    // Route::get('/', [DashboardController::class, 'index']);
 
 });

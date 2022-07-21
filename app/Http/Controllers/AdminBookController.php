@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ManageBill;
+use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use TCG\Voyager\Http\Controllers\VoyagerBaseController;
 use Exception;
@@ -22,6 +24,7 @@ class AdminBookController extends VoyagerBaseController
 {
     public function index(Request $request)
     {
+      
         $slug = $this->getSlug($request);
         // dd($slug);
         // GET THE DataType based on the slug

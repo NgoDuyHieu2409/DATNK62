@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{{-- <!DOCTYPE html>
 <html lang="en">
 <head>
 	<!-- Meta -->
@@ -51,7 +51,7 @@
 				<div class="navbar-collapse collapse" id="navigation">
 					<ul class="nav navbar-nav navbar-right main-navigation" id="main-menu">
 						<li class="active"><a href="#home">Trang chủ</a></li>
-						<li><a href="#aboutus">Giới thiệu</a></li>
+						<li><a href="#about">Giới thiệu</a></li>
 						<li><a href="#service">Dịch vụ</a></li>
 						<li><a href="#gallery">Hình ảnh</a></li>
 						<li><a href="#testimonial">Đánh giá</a></li>
@@ -372,4 +372,4 @@
 	<script src="js/jquery.CSTiles-1.1.0.min.js"></script>
     <script src="js/function.js"></script>
 </body>
-</html>
+</html> --}}

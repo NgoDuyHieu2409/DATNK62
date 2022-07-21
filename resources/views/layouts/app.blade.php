@@ -32,10 +32,10 @@
     <link href="/css/magnific-popup.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/slicknav.css">
     <link rel="stylesheet" data-template-style="true" type="text/css" href="/css/CSTiles-1.1.0.css">
-    <link href="/css/custom.css" rel="stylesheet" media="screen">
     
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('/css/app.css') }}">
+    <link href="/css/custom.css" rel="stylesheet" media="screen">
 
     <!-- Scripts -->
     <script src="{{ asset('/js/app.js') }}" defer></script>

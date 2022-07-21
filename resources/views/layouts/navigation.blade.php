@@ -18,10 +18,18 @@
                     $c = "#gallery";
                     $d = "#testimonial";
                     $e = "#contact";
+                    $monga = "#ga";
+                    $monvit = "#vit";
+                    $monbo = "#bo";
+                    $monde = "#de";
+                    $monlau ="#lau";
+                    $monhaisan = "#haisan";
+                    $monkhaivi = "#khaivi";
+                    $douong = "#douong";
                 @endphp
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     @if (request()->routeIs('datban'))
-                        <x-nav-link :href="$a">
+                         {{-- <x-nav-link :href="$a">
                             {{ __('Giới thiệu') }}
                         </x-nav-link>
                         <x-nav-link :href="$b">
@@ -32,30 +40,33 @@
                         </x-nav-link>
                         <x-nav-link :href="$b">
                             {{ __('Dịch vụ') }}
-                        </x-nav-link>
+                        </x-nav-link>            --}}
                     @elseif (request()->routeIs('danhsach'))
-                        <x-nav-link :href="$a">
+                        <x-nav-link :href="route('datban')">
                             {{ __('Chọn bàn') }}
                         </x-nav-link>
-                        <x-nav-link :href="$a">
+                        <x-nav-link :href="$monga">
                             {{ __('Món gà') }}
                         </x-nav-link>
-                        <x-nav-link :href="$a">
+                        <x-nav-link :href="$monvit">
                             {{ __('Món vịt') }}
                         </x-nav-link>
-                        <x-nav-link :href="$a">
+                        <x-nav-link :href="$monbo">
                             {{ __('Món bò') }}
                         </x-nav-link>
-                        <x-nav-link :href="$a">
+                        <x-nav-link :href="$monde">
                             {{ __('Món dê') }}
                         </x-nav-link>
-                        <x-nav-link :href="$a">
-                            {{ __('Món hải sản') }}
+                        <x-nav-link :href="$monlau">
+                            {{ __('Món lẩu') }}
                         </x-nav-link>
-                        <x-nav-link :href="$a">
+                        <x-nav-link :href="$monkhaivi">
                             {{ __('Món khai vị') }}
                         </x-nav-link>
-                        <x-nav-link :href="$a">
+                        <x-nav-link :href="$monhaisan">
+                            {{ __('Món hải sản') }}
+                        </x-nav-link>
+                        <x-nav-link :href="$douong">
                             {{ __('Đồ uống') }}
                         </x-nav-link>
                    

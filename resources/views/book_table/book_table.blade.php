@@ -1,10 +1,21 @@
-
+<style>
+    .scroll_product{
+        position: absolute !important;
+        top: 10rem;
+        right: 0px;
+    }
+    .fix_table {
+        position: fixed !important;
+        top: 10rem;
+        left: 0px;
+    }
+</style>
 <x-app-layout>
     <div class="container" style="margin: 0 auto !important;">
 
-        <div class="clearfix" style="height: 100px;"></div>
+        <div class="clearfix" style="height: 10rem;"></div>
         <div class="row">
-            <div class="col-xs-5">
+            <div class="col-xs-5 mt-8 fix_table" style="padding-bottom: 4rem;overflow-y: scroll;">
                 {{-- @foreach ($data1 as $table ) --}}
                     <h1 class="text-center text-red-600 font-semibold" style="font-size:40px;">
                         Danh Sách Món {{$table->name}}
@@ -44,34 +55,37 @@
                             </tbody>
                         </table>
                         <div>
-                            <button class="btn btn-success" type="submit">Gửi thực đơn</button>
-                            <button class="btn btn-danger delete_all" type="button">Xóa tất cả</button>
+                            <button class="btn btn-success btn_send_order" type="submit" disabled>Gửi thực đơn</button>
+                            <button class="btn btn-danger delete_all btn_send_order" disabled type="button">Xóa tất cả</button>
                         </div>
                     </form>
                 {{-- @endforeach --}}
 
             </div>
-            <div class="col-xs-7">
+            <div class="col-xs-7 scroll_product">
                 @foreach ($data as $category)
-                
-                    <div class="row">
-                        <div class="col-xs-12">
+                    <div class="row" id="{{ $category->slug }}">
+                        <div class="col-xs-12 mt-8">
                             <h1 class="text-red-600 font-semibold" style="font-size:40px;">
                                 {{$category->name}}
                             </h1>
                         </div>
-                        @foreach ( $category->products as $product )
-                            <div class="col-xs-4">
+                        
+                        @foreach ( $category->products as $product)
+                            @if ($product->status == 1)
                                 
-                                <a href="javascript:0" class="select_product" id="select_product" data-id={{$product->id}}>
+                            <div class="col-xs-4 mb-4">
+                                
+                                <a href="javascript:0" class="select_product" id="select_product" data-id={{$product->id}} data-price={{$product->sale ?? $product->price}}>
                                     <input type="text" hidden class="sanpham-{{$product->id}}" name="" id="" value="{{$product->name}}" >
                                     <img class="img-fluid" src="{{Voyager::image($product->thumbnail('cropped'))}}" alt="">
-                                    <span style="margin-left:75px"> {{$product->name}}</span>
-                                    <br>
-                                    <span><del>{{$product->price}}VND</del></span>
-                                    <span style="float: right; color:red">{{$product->sale}}VND</span>
-                              </a>
+                                    <span style="display: flex; justify-content: center; padding: 10px 0px;"> {{$product->name}}</span>
+                                    <button style=" justify-content: right;" class="btn btn-success">Thêm món</button>
+                                    <span><del>{{number_format($product->price, 0, '.', '.')}}VND</del></span>
+                                    <span style="float: right; color:red">{{number_format($product->sale, 0, '.', '.')}}VND</span>
+                                </a>
                             </div>
+                            @endif
                         @endforeach
                     </div>
                 @endforeach
@@ -81,12 +95,18 @@
 </x-app-layout>
     <script>
         $(document).ready(function(){
+            let height = window.innerHeight;
+            let menu = $('.clearfix').height();
+            $('.fix_table').height(height - menu);
+
             let idx = 0;
             $(".select_product").click(function(){
                 var productId = $(this).data('id');
+                var price = $(this).data('price');
                 let productName = $(this).find(".sanpham-" + productId).val();
                 let totalProduct = $(this).find(".totalProduct").val();
                 let check = false;
+                $('.btn_send_order').prop('disabled', false);
                 $('.table_product').find('tr').each(function(){
                     if ($(this).hasClass('product-'+ productId)) {
                         $(this).find('#totalProduct'+ productId).val( parseInt($(this).find('#totalProduct'+ productId).val())+1);
@@ -100,7 +120,10 @@
                     var html = '<tr class="product product-'+productId+'">'
                                 + '<td class="product-name" name="nameProduct">' + productName + '</td>'
                                 + '<td class="product-id" hidden>' + productId + '</td>'
-                                + '<td id="calProduct"><input type="number" min="1" name="product['+idx+'][total]" class="totalProduct" id="totalProduct' + productId +'" value="1" ><input type="hidden" name="product['+idx+'][id]" value="'+productId+'"></td>'
+                                + '<td id="calProduct"><input type="number" min="1" name="product['+idx+'][total]" class="totalProduct" id="totalProduct' + productId +'" value="1" >'
+                                    +'<input type="hidden" name="product['+idx+'][id]" value="'+productId+'">'
+                                    +'<input type="hidden" name="product['+idx+'][price]" value="'+price+'">'
+                                    +'</td>'
                                 + '<td> <button type="button" data-id="'+productId+'" class="btn btn-danger remove">Xóa</button> </td> </tr>';
                                 $('#list-product').append(html);
  
@@ -114,6 +137,7 @@
             $('body').on('click', '.delete_all', function(e){
                 e.preventDefault();
                 $('#list-product').find('tr.product').remove();
+                $('.btn_send_order').prop('disabled', true);
             });
         });
 

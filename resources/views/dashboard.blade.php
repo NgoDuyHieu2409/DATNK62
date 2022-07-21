@@ -59,7 +59,6 @@
 				<div class="col-md-12">
 					<div class="main-title">
 						<p>Dịch vụ</p>
-						<!-- <h2>Hòa Moi</h2> -->
 					</div>
 				</div>
 			</div>
@@ -69,7 +68,6 @@
 					<div class="service-single">
 						<div class="icon-box"><i class="flaticon-chef"></i></div>
 						<h3>Phục vụ chuyên nghiệp</h3>
-						<!-- <p>lorem ispum dummy text lorem ispum dummy text lorem ispum dummy text lorem ispum dummy text lorem ispum  dummy text lorem ispum</p> -->
 					</div>
 				</div>
 				
@@ -77,7 +75,6 @@
 					<div class="service-single">
 						<div class="icon-box"><i class="flaticon-recipe"></i></div>
 						<h3>Menu nhiều món</h3>
-						<!-- <p>lorem ispum dummy text lorem ispum dummy text lorem ispum dummy text lorem ispum dummy text lorem ispum  dummy text lorem ispum</p> -->
 					</div>
 				</div>
 				
@@ -85,7 +82,6 @@
 					<div class="service-single">
 						<div class="icon-box"><i class="flaticon-coffee-cup"></i></div>
 						<h3>Đồ uống đa dạng</h3>
-						<!-- <p>lorem ispum dummy text lorem ispum dummy text lorem ispum dummy text lorem ispum dummy text lorem ispum  dummy text lorem ispum</p> -->
 					</div>
 				</div>
 				
@@ -192,7 +188,7 @@
 						<div class="item">
 							<div class="testimonial-single">
 								<p>"Đồ ăn đa dạng , giá cả phải chăng ... Tôi sẽ quay lại trong thời gian tới"</p>
-								<h3>Nguyễn Hương</h3>
+								<h3>Nguyễn Hải</h3>
 								<div class="rating">
 									<i class="fa fa-star"></i>
 									<i class="fa fa-star"></i>
@@ -206,7 +202,7 @@
 						<div class="item">
 							<div class="testimonial-single">
 								<p>"Nhân viên phục vụ chuyên nghiệp , đồ lên cực nhanh luôn . Cho nhà hàng 5 sao"</p>
-								<h3>Hoàng Ánh</h3>
+								<h3>Trần Long</h3>
 								<div class="rating">
 									<i class="fa fa-star"></i>
 									<i class="fa fa-star"></i>
@@ -220,7 +216,7 @@
 						<div class="item">
 							<div class="testimonial-single">
 								<p>"Lần đầu tiền ăn ở nhà hàng nhưng thấy thật đáng tiền bỏ ra , tuyệt vời "</p>
-								<h3>Mai Hồng Quân</h3>
+								<h3>Nguyễn Mai Anh</h3>
 								<div class="rating">
 									<i class="fa fa-star"></i>
 									<i class="fa fa-star"></i>
@@ -297,8 +293,6 @@
 					<div class="siteinfo">
 						<p>Copyright &copy; Hieu ND. All rights reserved</p>
 					</div>
-					
-					
 					
 					<div class="footer-social">
 						<a href="#"><i class="fa fa-facebook"></i></a>

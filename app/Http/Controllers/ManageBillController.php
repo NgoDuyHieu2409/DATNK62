@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ManageBill;
+use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use TCG\Voyager\Http\Controllers\VoyagerBaseController;
 // use Exception;
@@ -23,7 +25,7 @@ class ManageBillController extends VoyagerBaseController
     {
         // GET THE SLUG, ex. 'posts', 'pages', etc.
         $slug = $this->getSlug($request);
-        $status = $request->query();
+        $status = $request->query('status') ?? 0;
 
         // GET THE DataType based on the slug
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -51,9 +53,9 @@ class ManageBillController extends VoyagerBaseController
         if (strlen($dataType->model_name) != 0) {
             $model = app($dataType->model_name);
 
-            $query = $model::select($dataType->name.'.*');
+            $query = $model::select($dataType->name . '.*');
 
-            if ($dataType->scope && $dataType->scope != '' && method_exists($model, 'scope'.ucfirst($dataType->scope))) {
+            if ($dataType->scope && $dataType->scope != '' && method_exists($model, 'scope' . ucfirst($dataType->scope))) {
                 $query->{$dataType->scope}();
             }
 
@@ -66,16 +68,16 @@ class ManageBillController extends VoyagerBaseController
                     $query = $query->withTrashed();
                 }
             }
-            $query = $query->where('status', $status['status']);
+            $query = $query->where('status', $status);
 
             // If a column has a relationship associated with it, we do not want to show that field
             $this->removeRelationshipField($dataType, 'browse');
 
             if ($search->value != '' && $search->key && $search->filter) {
                 $search_filter = ($search->filter == 'equals') ? '=' : 'LIKE';
-                $search_value = ($search->filter == 'equals') ? $search->value : '%'.$search->value.'%';
+                $search_value = ($search->filter == 'equals') ? $search->value : '%' . $search->value . '%';
 
-                $searchField = $dataType->name.'.'.$search->key;
+                $searchField = $dataType->name . '.' . $search->key;
                 if ($row = $this->findSearchableRelationshipRow($dataType->rows->where('type', 'relationship'), $search->key)) {
                     $query->whereIn(
                         $searchField,
@@ -93,12 +95,12 @@ class ManageBillController extends VoyagerBaseController
                 $querySortOrder = (!empty($sortOrder)) ? $sortOrder : 'desc';
                 if (!empty($row)) {
                     $query->select([
-                        $dataType->name.'.*',
-                        'joined.'.$row->details->label.' as '.$orderBy,
+                        $dataType->name . '.*',
+                        'joined.' . $row->details->label . ' as ' . $orderBy,
                     ])->leftJoin(
-                        $row->details->table.' as joined',
-                        $dataType->name.'.'.$row->details->column,
-                        'joined.'.$row->details->key
+                        $row->details->table . ' as joined',
+                        $dataType->name . '.' . $row->details->column,
+                        'joined.' . $row->details->key
                     );
                 }
 
@@ -190,4 +192,193 @@ class ManageBillController extends VoyagerBaseController
             'showCheckboxColumn'
         ));
     }
+
+    public function show(Request $request, $id)
+    {
+
+        $slug = $this->getSlug($request);
+
+        $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+
+        $isSoftDeleted = false;
+
+        if (strlen($dataType->model_name) != 0) {
+            $model = app($dataType->model_name);
+            $query = $model->query();
+
+            // Use withTrashed() if model uses SoftDeletes and if toggle is selected
+            if ($model && in_array(SoftDeletes::class, class_uses_recursive($model))) {
+                $query = $query->withTrashed();
+            }
+            if ($dataType->scope && $dataType->scope != '' && method_exists($model, 'scope' . ucfirst($dataType->scope))) {
+                $query = $query->{$dataType->scope}();
+            }
+            $dataTypeContent = call_user_func([$query, 'findOrFail'], $id);
+            if ($dataTypeContent->deleted_at) {
+                $isSoftDeleted = true;
+            }
+        } else {
+            // If Model doest exist, get data from table name
+            $dataTypeContent = DB::table($dataType->name)->with('OrderDetail')->where('id', $id)->first();
+        }
+
+        // Replace relationships' keys for labels and create READ links if a slug is provided.
+        $dataTypeContent = $this->resolveRelations($dataTypeContent, $dataType, true);
+        // $order_detail = OrderDetail::join('manage_products','order_details.product_id','=','manage_products.id')->join('manage_bills','order_details.order_id','=','manage_bills.id');
+        // If a column has a relationship associated with it, we do not want to show that field
+        $this->removeRelationshipField($dataType, 'read');
+
+        // Check permission
+        $this->authorize('read', $dataTypeContent);
+
+        // Check if BREAD is Translatable
+        $isModelTranslatable = is_bread_translatable($dataTypeContent);
+
+        // Eagerload Relations
+        $this->eagerLoadRelations($dataTypeContent, $dataType, 'read', $isModelTranslatable);
+
+        $view = 'voyager::bread.read';
+        if (view()->exists("voyager::$slug.read")) {
+            $view = "voyager::$slug.read";
+        }
+
+        // dd($view);
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'isSoftDeleted'));
+    }
+
+    public function updateOrderDetail(Request $request, $id)
+    {
+        $slug = $this->getSlug($request);
+
+        $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+
+        // Compatibility with Model binding.
+        $id = $id instanceof \Illuminate\Database\Eloquent\Model ? $id->{$id->getKeyName()} : $id;
+
+        $model = app($dataType->model_name);
+        $query = $model->query();
+        if ($dataType->scope && $dataType->scope != '' && method_exists($model, 'scope' . ucfirst($dataType->scope))) {
+            $query = $query->{$dataType->scope}();
+        }
+        if ($model && in_array(SoftDeletes::class, class_uses_recursive($model))) {
+            $query = $query->withTrashed();
+        }
+
+        $data = $query->findOrFail($id);
+
+        // Check permission
+        $this->authorize('edit', $data);
+
+        // dd("update");
+        // $update_product = ManageBill::find($id);
+        // $update_product->total = $request->quantity;
+        // $update_product->total_price = 0;
+
+        // $update_product->save();
+        // dd($request->all());
+        $total_product = array_sum(array_values($request->quantity));
+        $total_tl = array_sum(array_values($request->tralai));
+        $total_price = $request->total_price;
+
+        DB::table('manage_bills')
+            ->where("manage_bills.id", '=', $id)
+            ->update([
+                'manage_bills.total' => $total_product - $total_tl,
+                'manage_bills.total_price' => str_replace('.', '', $request->total_price),
+                'updated_at' => now(),
+            ]);
+
+        foreach ($request->tralai as $order_detailId => $quantity_product) {
+            $order_detail= OrderDetail::where([
+                'id' => $order_detailId
+            ])
+            ->update([
+                'quantyti' => $request->quantity[$order_detailId] - $quantity_product
+            ]);
+        }
+
+        return redirect()->back();
+      
+
+        if (auth()->user()->can('browse', app($dataType->model_name))) {
+            $redirect = redirect()->route("voyager.{$dataType->slug}.index");
+        } else {
+            $redirect = redirect()->back();
+        }
+
+        return $redirect->with([
+            'message'    => __('voyager::generic.successfully_updated') . " {$dataType->getTranslatedAttribute('display_name_singular')}",
+            'alert-type' => 'success',
+        ]);
+    }
+
+    public function UOrderDetail(Request $request, $id)
+    {
+        $slug = $this->getSlug($request);
+
+        $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+        // Compatibility with Model binding.
+        $id = $id instanceof \Illuminate\Database\Eloquent\Model ? $id->{$id->getKeyName()} : $id;
+
+        $model = app($dataType->model_name);
+        $query = $model->query();
+        if ($dataType->scope && $dataType->scope != '' && method_exists($model, 'scope' . ucfirst($dataType->scope))) {
+            $query = $query->{$dataType->scope}();
+        }
+        if ($model && in_array(SoftDeletes::class, class_uses_recursive($model))) {
+            $query = $query->withTrashed();
+        }
+
+        $data = $query->findOrFail($id);
+
+        // Check permission
+        // $this->authorize('edit', $data);
+
+        $total_product = array_sum(array_values($request->quantity));
+        $total_tl = array_sum(array_values($request->tralai));
+        $total_price = $request->total_price;
+
+        DB::table('manage_bills')
+            ->where("manage_bills.id", '=', $id)
+            ->update([
+                'manage_bills.total' => $total_product - $total_tl,
+                'manage_bills.total_price' => str_replace('.', '', $request->total_price),
+                'updated_at' => now(),
+
+            ]);
+
+            foreach ($request->tralai as $order_detailId => $quantity_product) {
+            $order_detail= OrderDetail::where([
+                'id' => $order_detailId
+            ])
+            ->update([
+                'quantyti' => $request->quantity[$order_detailId] - $quantity_product
+            ]);
+        }
+
+        return redirect()->back();
+      
+
+        if (auth()->user()->can('browse', app($dataType->model_name))) {
+            $redirect = redirect()->route("voyager.{$dataType->slug}.index");
+        } else {
+            $redirect = redirect()->back();
+        }
+
+        return $redirect->with([
+            'message'    => __('voyager::generic.successfully_updated') . " {$dataType->getTranslatedAttribute('display_name_singular')}",
+            'alert-type' => 'success',
+        ]);
+    }
+
+   
+    public function active($id, $tableId)
+    {
+        DB::table('manage_bills')->where('id', $id)->update(['status' => 1]);
+        DB::table('manage_tables')->where('id', $tableId)->update(['status' => 0]);
+
+        return redirect()->route('voyager.manage-bills.index', ['status' => 0]);
+        
+    }
+
 }

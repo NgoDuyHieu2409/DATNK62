@@ -25,11 +25,18 @@ class BookTableController extends Controller
     public function index(Request $request)
     {
         $data = Category::all();
-        $table = ManageTable::where('id', $request->id)->first();
-        $order = OrderDetail::join('manage_bills','order_details.order_id','=','manage_bills.id')
-        ->join('manage_products','order_details.product_id','=','manage_products.id')
-        ->where('manage_bills.id_ban', $request->id)
-        ->get()->toArray();
+        $table = ManageTable::with('manage_biil')
+            ->where('id', $request->id)->first();
+
+        $order = [];
+        if($table->manage_biil){
+            $order = OrderDetail::join('manage_bills','order_details.order_id','=','manage_bills.id')
+            ->join('manage_products','order_details.product_id','=','manage_products.id')
+            ->where('manage_bills.id_ban', $request->id)
+            ->where('manage_bills.status', 0)
+            ->get()->toArray();
+        }    
+    
         return view('book_table.book_table', ['data' => $data,'table'=>$table,'order'=>$order]);
     }
 
@@ -50,19 +57,50 @@ class BookTableController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    
     {
         $sum= 0;
+        $totalPrice = 0;
         $create= [];
         foreach($request->product as $key => $product ){
             $sum = $sum + $product['total'];
+            $totalPrice = $totalPrice + ($product['price'] * $product['total']);
         }
-        $checkIdBan = ManageBill::where('id_ban',$request->ban_id)->get()->toArray();
-        if(empty($checkIdBan)){
+        $checkIdBan = ManageBill::where('id_ban',$request->ban_id)->where('manage_bills.status', 0)->first();
+        if($checkIdBan){
+            $sum = $checkIdBan->total + $sum;
+            $order = $checkIdBan->update([
+                "total" => $sum,
+                "total_price" => ($checkIdBan->total_price + $totalPrice),
+            ]);
+            $allDataOrder = OrderDetail::where('order_id',$checkIdBan->id)->get()->toArray();
+            
+            foreach($request->product as $key => $product ){
+                $checkIs = true;
+                foreach ($allDataOrder as $productOrder){
+                    if ($product['id'] == $productOrder['product_id']){
+                        $checkIs = false;
+                        $quantity = $product['total']+ $productOrder['quantyti'];
+                        OrderDetail::where([
+                            ['product_id',$productOrder['product_id']],
+                            ['order_id',$checkIdBan->id],
+                        ])->update(['quantyti'=> $quantity]);
+                    } 
+                }
+                if($checkIs == true){
+                    $create[] = [
+                        "order_id" => $checkIdBan->id,
+                        "quantyti" =>$product['total'],
+                        "product_id" =>$product['id'],
+                    ]; 
+                    OrderDetail::insert($create);
+                }
+            }
+        } else {
             $order = ManageBill::create([
                 "user_id" => Auth::id(),
                 "id_ban" => $request->ban_id, 
                 "total" => $sum,
+                "total_price" => $totalPrice,
              ]);
             foreach($request->product as $key => $product ){
                 $create[] = [
@@ -73,35 +111,6 @@ class BookTableController extends Controller
             }
             OrderDetail::insert($create);
             ManageTable::where('id',$order->id_ban)->update(['status'=>1]);
-        } else {
-            $getTotal = ManageBill::where('id_ban',$request->ban_id)->first();
-            $sum = $getTotal->total + $sum;
-            $order = ManageBill::where('id_ban',$request->ban_id)->update([
-                "total" => $sum,
-             ]);
-            $allDataOrder = OrderDetail::where('order_id',$getTotal->id)->get()->toArray();
-            
-            foreach($request->product as $key => $product ){
-                $checkIs = true;
-                foreach ($allDataOrder as $productOrder){
-                    if ($product['id'] == $productOrder['product_id']){
-                        $checkIs = false;
-                        $quantity = $product['total']+ $productOrder['quantyti'];
-                        OrderDetail::where([
-                            ['product_id',$productOrder['product_id']],
-                            ['order_id',$getTotal->id],
-                        ])->update(['quantyti'=> $quantity]);
-                    } 
-                }
-                if($checkIs == true){
-                    $create[] = [
-                        "order_id" => $getTotal->id,
-                        "quantyti" =>$product['total'],
-                        "product_id" =>$product['id'],
-                    ]; 
-                    OrderDetail::insert($create);
-                }
-            }
         }
          
          return redirect()->route('danhsach',['id' => $request->ban_id]);;
