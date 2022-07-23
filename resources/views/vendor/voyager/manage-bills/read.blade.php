@@ -13,7 +13,7 @@
                     <p class="mt-3">Thời gian :<?= date('H:i:s') ?> </p>
                     <p>Ngày :<?= date('d-m-Y') ?> </p>
                     <p>Người lập hoá đơn :{{ !empty($dataTypeContent->user)?$dataTypeContent->user->name : ''}}</p>
-                    <form action="{{route("admin.manage-bills.updateOrderDetail", $dataTypeContent->id)}}" method="POST">
+                    <form action="{{route("admin.manage-bills.updateOrderDetail", $dataTypeContent->id)}}" method="POST" id ="print_hd" >
                         {{-- @method('PUT') --}}
                         @csrf
                         <table class="table table table-hover">
@@ -53,9 +53,12 @@
                         <input type="hidden" name="total_price" value="{{number_format(array_sum($total_price), 0, '.', '.')}}">
                         <div class="container">
                             <button class="btn btn-danger mt-5" type="submit">Cập nhật</button>
-                            <a class="btn btn-success mt-5" href="{{route('cate.active', ['id' => $dataTypeContent->id, 'tableId' => $dataTypeContent->id_ban])}}">Thanh toán</a>
+                            <a class="btn btn-success mt-5" href="{{route('cate.active', ['id' => $dataTypeContent->id, 'tableId' => $dataTypeContent->id_ban])}}" onclick="printJS('print_hd', 'html')">Thanh toán</a>
                         </div>
                     </form>
+                     <button type="button" onclick="printJS('print_hd', 'html')">
+                        Print Form
+                     </button>
                 </div>
             </div>
         </div>
@@ -79,7 +82,7 @@
         $('input.traLai').on('change', function(){
                 let id = $(this).data('id');
                 if(parseInt($(`input#traLai_${id}`).val()) > parseInt($(`input#quantity_${id}`).val())){
-                    alert('khong dc tra lai lown hown goc');
+                    alert('Không được trả lại lớn hơn số lượng đã đặt');
                     let updateTotalRow = $(`input#quantity_${id}`).val() * $(`input#priceSale_${id}`).val();
                     $(`input#traLai_${id}`).val(0);
                     $(`td#${id}`).text(updateTotalRow);
