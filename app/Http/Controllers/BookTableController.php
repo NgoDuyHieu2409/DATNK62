@@ -60,41 +60,33 @@ class BookTableController extends Controller
     {
         $sum= 0;
         $totalPrice = 0;
-        $create= [];
-        foreach($request->product as $key => $product ){
+        $checkIdBan = ManageBill::where('id_ban',$request->ban_id)->where('manage_bills.status', 0)->first();
+        foreach($request->product as $product ){
             $sum = $sum + $product['total'];
             $totalPrice = $totalPrice + ($product['price'] * $product['total']);
         }
-        $checkIdBan = ManageBill::where('id_ban',$request->ban_id)->where('manage_bills.status', 0)->first();
         if($checkIdBan){
-            $sum = $checkIdBan->total + $sum;
-            $order = $checkIdBan->update([
-                "total" => $sum,
-                "total_price" => ($checkIdBan->total_price + $totalPrice),
-            ]);
-            $allDataOrder = OrderDetail::where('order_id',$checkIdBan->id)->get()->toArray();
-            
-            foreach($request->product as $key => $product ){
-                $checkIs = true;
-                foreach ($allDataOrder as $productOrder){
-                    if ($product['id'] == $productOrder['product_id']){
-                        $checkIs = false;
-                        $quantity = $product['total']+ $productOrder['quantyti'];
-                        OrderDetail::where([
-                            ['product_id',$productOrder['product_id']],
-                            ['order_id',$checkIdBan->id],
-                        ])->update(['quantyti'=> $quantity]);
-                    } 
-                }
-                if($checkIs == true){
-                    $create[] = [
-                        "order_id" => $checkIdBan->id,
-                        "quantyti" =>$product['total'],
-                        "product_id" =>$product['id'],
-                    ]; 
-                    OrderDetail::insert($create);
+            $productId = OrderDetail::where('order_id',$checkIdBan->id)->pluck('product_id')->toArray();
+            foreach($request->product as $product ){
+                if (in_array($product['id'], $productId)){
+                    $a[] = $product;
+                    $productOrder = OrderDetail::where('product_id',$product['id'])
+                        ->where('order_id',$checkIdBan->id)
+                        ->first();
+                    
+                    $productOrder->quantyti = $product['total'] + $productOrder['quantyti'];
+                    $productOrder->save();
+                } else {
+                    $orderDetail = new OrderDetail;
+                    $orderDetail->order_id = $checkIdBan->id;
+                    $orderDetail->quantyti = $product['total'];
+                    $orderDetail->product_id = $product['id'];
+                    $orderDetail->save();
                 }
             }
+            $checkIdBan->total = $checkIdBan->total + $sum;
+            $checkIdBan->total_price = $checkIdBan->total_price + $totalPrice;
+            $checkIdBan->save();
         } else {
             $order = ManageBill::create([
                 "user_id" => Auth::id(),
@@ -102,18 +94,25 @@ class BookTableController extends Controller
                 "total" => $sum,
                 "total_price" => $totalPrice,
              ]);
-            foreach($request->product as $key => $product ){
+            foreach($request->product as  $product ){
                 $create[] = [
                     "order_id" => $order->id,
                     "quantyti" =>$product['total'],
                     "product_id" =>$product['id'],
+                    // "tim_order" => json_encode([
+                    //     "order_id" => $order->id,
+                    //     "quantyti" =>$product['total'],
+                    //     "product_id" =>$product['id'],
+                    //     "created_at" => now(),
+                    // ]),
+                    "created_at" => now(),
                 ]; 
             }
             OrderDetail::insert($create);
             ManageTable::where('id',$order->id_ban)->update(['status'=>1]);
         }
-         
-         return redirect()->route('danhsach',['id' => $request->ban_id]);;
+
+        return redirect()->route('danhsach',['id' => $request->ban_id]);;
     }
 
     /**

@@ -20,6 +20,11 @@ class ManageBill extends Model
         'status',
         'total_price',
     ];
+
+    public function getTotalPriceAttribute($value)
+    {
+        return number_format($value, 0, ',', '.');
+    }
     
     public function order_details(){
         return $this->hasMany(OrderDetail::class,'order_id','id');

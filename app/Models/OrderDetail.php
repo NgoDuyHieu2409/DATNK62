@@ -15,6 +15,7 @@ class OrderDetail extends Model
         'order_id',
         'quantyti',
         'product_id',
+        'created_at',
     ];
     public function product(){
         return $this->belongsTo(ManageProduct::class,'product_id','id');

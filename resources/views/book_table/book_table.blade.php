@@ -43,17 +43,11 @@
                                         <td>{{ number_format($value['quantyti'] * $value['sale'], 0, '.', '.') }}</td>
                                     </tr>
                                 @endforeach
-                                {{-- <tr> --}}
-                                {{-- <td id="nameProduct" class="product-name"></td>
-                                    <td id="calProduct">
-                                        <input type="text" hidden class="totalProduct" >
-                                    </td> --}
-                                {{-- </tr> --}}
+                              
                                 <tr>
                                     <td class="tongtien" colspan="3">Tổng tiền:<br>
                                         {{ number_format(array_sum($total_price), 0, '.', '.') }} VND
-                                        <input type="hidden" id="totalPriceOld"
-                                            value="{{ array_sum($total_price) }}">
+                                        <input type="hidden" id="totalPriceOld" value="{{ array_sum($total_price) }}">
 
                                     </td>
                                 </tr>
@@ -76,7 +70,7 @@
                 {{-- @endforeach --}}
 
             </div>
-            <div class="col-xs-7 scroll_product">
+            <div class="col-xs-7 scroll_product mb-5">
                 @foreach ($data as $category)
                     <div class="row" id="{{ $category->slug }}">
                         <div class="col-xs-12 mt-8">
@@ -87,8 +81,7 @@
 
                         @foreach ($category->products as $product)
                             @if ($product->status == 1)
-                                <div class="col-xs-4 mb-4">
-
+                                <div class="col-xs-4 mb-5 mt-8">
                                     <a href="javascript:0" class="select_product" id="select_product"
                                         data-id={{ $product->id }}
                                         data-price={{ $product->sale ?? $product->price }}>
@@ -98,14 +91,23 @@
                                             src="{{ Voyager::image($product->thumbnail('cropped')) }}" alt="">
                                         <span style="display: flex; justify-content: center; padding: 10px 0px;">
                                             {{ $product->name }}</span>
-                                        <span><del>{{ number_format($product->price, 0, '.', '.') }}VND</del></span>
-                                        <span
-                                            style="float: right; color:red">{{ number_format($product->sale, 0, '.', '.') }}VND</span>
-                                        <button style=" justify-content: center;float:left" class="btn btn-success">Thêm
-                                            món</button>
+                                            <div class="row">
+                                            <div class="col-xs-6"><span>
+                                                @if ($product->sale != 0)
+                                                    <del>{{ number_format($product->price, 0, '.', '.') }}VND</del>
+                                                @endif
+                                            </span></div>
+                                            <div class="col-xs-6"><span style="float: right; color:red">
+                                                @if ($product->sale == 0)
+                                                    {{ number_format($product->price, 0, '.', '.') }}VND
+                                                @else
+                                                    {{ number_format($product->sale, 0, '.', '.') }}VND
+                                                @endif
+                                            </span></div>
+                                        </div>
+                                        <button style=" justify-content: center;float:left" class="btn btn-success">Thêm món</button>
                                     </a>
-                                    <input type="hidden" id="price-{{ $product->id }}"
-                                        value="{{ $product->sale }}">
+                                    <input type="hidden" id="price-{{ $product->id }}" value="{{ $product->sale }}">
                                 </div>
                             @endif
                         @endforeach
@@ -135,9 +137,9 @@
             html += '<p>Tổng tiền dự kiến: <h1 class="totalPriceExpect">' + total + ' VND </h1></p>';
             html += '</tr>';
 
-            if($(".dukientong").html() == undefined){
+            if ($(".dukientong").html() == undefined) {
                 $('#list-product').append(html);
-            }else{
+            } else {
                 $('.totalPriceExpect').html(total + " VND");
             }
         } else {
@@ -188,9 +190,9 @@
                     '<td> <button onclick="abc()" type="button" data-id="' + productId +
                     '" class="btn btn-danger remove">Xóa</button> </td> </tr>';
 
-                if(tongtien == undefined){
+                if (tongtien == undefined) {
                     $('#list-product').prepend(html);
-                }else{
+                } else {
                     $('#list-product .tongtien').parent().after(html);
                 }
             }

@@ -4,7 +4,7 @@
       <div class="table-responsive" id="data">            
         <table class="table table-hover text-center">
           <thead>
-            <tr style="background: red">
+            <tr style="background: rgb(228, 35, 35)">
               <th>Tháng</th>
               <th>Doanh thu</th>
               <th style="max-width: 100px;">Đơn vị</th>
@@ -14,7 +14,7 @@
            @foreach ($result as $key=>$value )
            <tr>
             <th>Tháng {{$key}}</th>   
-            <th> {{$value}}</th>
+            <th> {{ number_format($value, 0, '.', '.')}}</th>
             <th>VND</th>
           </tr>  
            @endforeach

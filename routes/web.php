@@ -6,6 +6,7 @@ use App\Http\Controllers\BookTableController;
 use App\Http\Controllers\AdminBookController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ManageBillController;
+use App\Http\Controllers\ProductMuchController;
 
 /*
 |--------------------------------------------------------------------------

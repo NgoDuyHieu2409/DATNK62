@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ManageBill;
 use App\Models\OrderDetail;
+use Facade\FlareClient\Http\Response;
 use Illuminate\Http\Request;
 use TCG\Voyager\Http\Controllers\VoyagerBaseController;
 // use Exception;
@@ -189,13 +190,12 @@ class ManageBillController extends VoyagerBaseController
             'defaultSearchKey',
             'usesSoftDeletes',
             'showSoftDeleted',
-            'showCheckboxColumn'
+            'showCheckboxColumn',
         ));
     }
 
     public function show(Request $request, $id)
     {
-
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -224,6 +224,7 @@ class ManageBillController extends VoyagerBaseController
 
         // Replace relationships' keys for labels and create READ links if a slug is provided.
         $dataTypeContent = $this->resolveRelations($dataTypeContent, $dataType, true);
+        // dd($dataTypeContent);
         // $order_detail = OrderDetail::join('manage_products','order_details.product_id','=','manage_products.id')->join('manage_bills','order_details.order_id','=','manage_bills.id');
         // If a column has a relationship associated with it, we do not want to show that field
         $this->removeRelationshipField($dataType, 'read');
@@ -242,7 +243,6 @@ class ManageBillController extends VoyagerBaseController
             $view = "voyager::$slug.read";
         }
 
-        // dd($view);
         return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'isSoftDeleted'));
     }
 
@@ -314,6 +314,7 @@ class ManageBillController extends VoyagerBaseController
 
     public function UOrderDetail(Request $request, $id)
     {
+        // dd($request->all());
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -352,7 +353,8 @@ class ManageBillController extends VoyagerBaseController
                 'id' => $order_detailId
             ])
             ->update([
-                'quantyti' => $request->quantity[$order_detailId] - $quantity_product
+                'quantyti' => $request->quantity[$order_detailId] - $quantity_product,
+                'quantity_give'=> $request->quantitydem[$order_detailId]
             ]);
         }
 
@@ -376,9 +378,10 @@ class ManageBillController extends VoyagerBaseController
     {
         DB::table('manage_bills')->where('id', $id)->update(['status' => 1]);
         DB::table('manage_tables')->where('id', $tableId)->update(['status' => 0]);
-
-        return redirect()->route('voyager.manage-bills.index', ['status' => 0]);
-        
+        return response()->json([
+            'success'=>true,
+            'url' => route('voyager.manage-bills.index', ['status' => 0])
+        ]);
     }
 
 }
